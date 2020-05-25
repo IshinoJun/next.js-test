@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { NextPage, GetStaticProps } from "next";
 import * as React from "react";
 import fetch from "isomorphic-unfetch";
 
@@ -18,7 +18,7 @@ const SsrIndexPage: NextPage<Props> = (props) => {
   );
 };
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const res = await fetch("https://api.github.com/repos/zeit/next.js");
   const json = await res.json();
   const stars = json.stargazers_count;
@@ -31,6 +31,6 @@ export async function getStaticProps() {
       buildTime,
     },
   };
-}
+};
 
 export default SsrIndexPage;
