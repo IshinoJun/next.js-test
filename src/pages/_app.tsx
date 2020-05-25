@@ -2,7 +2,7 @@ import * as React from "react";
 import App, { AppProps } from "next/app";
 import "sanitize.css";
 
-class MyApp extends App {
+export default class extends App {
   render(): JSX.Element {
     const { Component, pageProps }: AppProps = this.props;
     return (
@@ -12,5 +12,3 @@ class MyApp extends App {
     );
   }
 }
-
-export default MyApp;

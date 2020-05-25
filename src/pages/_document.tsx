@@ -1,15 +1,16 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Document, { Html, Head, Main, NextScript } from "next/document";
+import * as React from "react";
 
 interface CustomDocumentInterface {
-  url: string
-  title: string
-  description: string
+  url: string;
+  title: string;
+  description: string;
 }
 
 class CustomDocument extends Document implements CustomDocumentInterface {
-  url = 'https://example.com'
-  title = 'Demo Next.js'
-  description = 'Demo of Next.js'
+  url = "https://example.com";
+  title = "Demo Next.js";
+  description = "Demo of Next.js";
 
   render(): JSX.Element {
     return (
@@ -37,8 +38,8 @@ class CustomDocument extends Document implements CustomDocumentInterface {
           <NextScript />
         </body>
       </Html>
-    )
+    );
   }
 }
 
-export default CustomDocument
+export default CustomDocument;
