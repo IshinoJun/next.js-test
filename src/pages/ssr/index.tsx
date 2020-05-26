@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import * as React from "react";
 import fetch from "isomorphic-unfetch";
 
@@ -17,12 +17,19 @@ const SsrIndexPage: NextPage<Props> = (props) => {
   );
 };
 
-SsrIndexPage.getInitialProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const res = await fetch("https://api.github.com/repos/zeit/next.js");
   const json = await res.json();
+  const stars = json.stargazers_count;
+  // ビルド時刻の取得
   const buildTime = new Date().toString();
-  const props: Props = { stars: json.stargazers_count, buildTime };
-  return props;
+
+  return {
+    props: {
+      stars,
+      buildTime,
+    },
+  };
 };
 
 export default SsrIndexPage;
