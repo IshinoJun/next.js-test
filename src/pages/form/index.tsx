@@ -2,26 +2,16 @@ import { NextPage } from "next";
 import React from "react";
 import { Formik, Field, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import {
-  Container,
-  CssBaseline,
-  makeStyles,
-  Avatar,
-  Typography,
-  Grid,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  Link,
-} from "@material-ui/core";
+import { Container, CssBaseline, makeStyles, Avatar, Typography, Grid, Button, Link } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { TextField } from "formik-material-ui";
+import { TextField, CheckboxWithLabel } from "formik-material-ui";
 
 interface Values {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
+  checked: boolean;
 }
 
 const FormIndexPage: NextPage = () => {
@@ -34,7 +24,7 @@ const FormIndexPage: NextPage = () => {
     },
     avatar: {
       margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
+      backgroundColor: theme.palette.primary.main,
     },
     form: {
       width: "100%", // Fix IE 11 issue.
@@ -50,9 +40,11 @@ const FormIndexPage: NextPage = () => {
     lastName: "",
     email: "",
     password: "",
+    checked: false,
   };
 
   const handleSubmit = (values: Values, formikHelpers: FormikHelpers<Values>) => {
+    console.log(values);
     const { setSubmitting } = formikHelpers;
     setSubmitting(false);
   };
@@ -68,87 +60,98 @@ const FormIndexPage: NextPage = () => {
 
   return (
     <Formik initialValues={defaultValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Form className={classes.form} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Field
-                  autoComplete="fname"
-                  name="firstName"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="苗字"
-                  autoFocus
-                  component={TextField}
-                />
+      {({ values }) => (
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+            <Form className={classes.form} noValidate>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <Field
+                    autoComplete="fname"
+                    name="firstName"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="firstName"
+                    label="苗字"
+                    component={TextField}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Field
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="lastName"
+                    label="名前"
+                    name="lastName"
+                    autoComplete="lname"
+                    component={TextField}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="email"
+                    label="メールアドレス"
+                    name="email"
+                    autoComplete="email"
+                    component={TextField}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name="password"
+                    label="パスワード"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    component={TextField}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    component={CheckboxWithLabel}
+                    color="primary"
+                    name="checked"
+                    type="checkbox"
+                    Label={{ label: "利用規約に同意する" }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <Field
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="名前"
-                  name="lastName"
-                  autoComplete="lname"
-                  component={TextField}
-                />
+              <Button
+                type="submit"
+                disabled={!values.checked}
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Sign Up
+              </Button>
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <Link href="#" variant="body2">
+                    Sign inはこちら
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <Field
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="email"
-                  label="メールアドレス"
-                  name="email"
-                  autoComplete="email"
-                  component={TextField}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="パスワード"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  component={TextField}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="利用規約に同意する"
-                />
-              </Grid>
-            </Grid>
-            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-              Sign Up
-            </Button>
-            <Grid container justify="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Sign inはこちら
-                </Link>
-              </Grid>
-            </Grid>
-          </Form>
-        </div>
-      </Container>
+            </Form>
+          </div>
+        </Container>
+      )}
     </Formik>
   );
 };
