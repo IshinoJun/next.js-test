@@ -24,11 +24,11 @@ const BlogHome: NextPage<Props> = (props: Props) => {
       </Link>
       <div>
         {blogs.map((blog, index) => (
-          <div className="item" key={index}>
-            <h2 className="item__title">{blog.title}</h2>
-            <p className="item__label">{blog.label}</p>
-            <Link href="/blogs/[id]" as={`/blogs/${blog?.id ?? "0"}`}>
-              <a className="item__link">詳細へ</a>
+          <div key={index}>
+            <h2>{blog.title}</h2>
+            <p>{blog.label}</p>
+            <Link href="/blogs/[id]" as={blog.id ? `/blogs/${blog.id}` : undefined}>
+              <a>詳細へ</a>
             </Link>
           </div>
         ))}
@@ -43,16 +43,15 @@ export const getStaticProps: GetStaticProps = async ({
 }): Promise<{
   props: Props;
 }> => {
-  const key = {
-    headers: { "X-API-KEY": process.env.API_KEY },
-  };
-  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-  const res = await axios.get(process.env.END_POINT + "blogs/?limit=9999", key);
+  const key = { headers: { "X-API-KEY": process.env.API_KEY } };
+  const res = await axios.get((process.env.END_POINT as string) + "blogs/?limit=9999", key);
   const data: Array<Blogs> = await res.data.contents;
   // プレビュー時は draft のコンテンツを追加
   if (preview) {
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    const draftUrl = process.env.END_POINT + "blogs/" + previewData.id + `?draftKey=${previewData.draftKey as string}`;
+    const previewDataId = previewData.id as string;
+
+    const draftUrl =
+      (process.env.END_POINT as string) + "blogs/" + previewDataId + `?draftKey=${previewData.draftKey as string}`;
     const draftRes = await axios.get(draftUrl, key);
     data.unshift(await draftRes.data);
   }
